@@ -46,3 +46,4 @@ for title in tqdm(wiki_dic):
 link_file.close()
 start.close()
 des.close()
+f.close()
