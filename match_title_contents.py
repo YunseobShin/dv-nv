@@ -3,7 +3,7 @@ from tqdm import tqdm
 import numpy as np
 
 eval_set_num = sys.argv[1]
-sample_nodes = np.load('sample_nodes_30k'+eval_set_num+'.npy')
+sample_nodes = np.load('sample_nodes_77k'+eval_set_num+'.npy')
 sample_nodes = [int(x) for x in sample_nodes]
 fn = open('wiki', 'r')
 wiki = fn.read()
@@ -28,10 +28,14 @@ for doc in tqdm(docs):
         # print(title)
         contents = re.sub('<doc(.*?)>', '', doc)
         contents = contents.replace('\n', ' ')
+        contents = re.sub(r'[\W_]+', ' ', contents)
+        contents = " ".join(contents.split())
+        contents = contents.lower()
+        contents = contents.replace(' a ', ' ')
         title_contents[title] = contents
 
 print(len(title_contents))
-with open('title_contents_'+eval_set_num+'.json', 'w') as f:
+with open('title_contents_77k_'+eval_set_num+'.json', 'w') as f:
     json.dump(title_contents, f)
 fn.close()
 output.close()

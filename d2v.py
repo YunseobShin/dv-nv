@@ -11,9 +11,9 @@ import multiprocessing
 cores = multiprocessing.cpu_count()
 
 #doc2vec parameters
-vector_size = 128
+vector_size = 256
 window_size = 15
-word_min_count = 2
+word_min_count = 1
 sampling_threshold = 1e-5
 negative_size = 5
 train_epoch = 100
@@ -27,8 +27,8 @@ if len(sys.argv) >= 3:
 	modelfile = sys.argv[2]
 
 else:
-	inputfile = "./title_contents.json"
-	modelfile = "./doc2vec_30k.model"
+	inputfile = "./title_contents_"+eval_set_num+".json"
+	modelfile = "./doc2vec_30k_"+eval_set_num
 
 with open(inputfile, 'r', encoding='UTF8') as f:
     data = json.loads(f.read())
@@ -49,6 +49,6 @@ doc_vectorizer = doc2vec.Doc2Vec(min_count=word_min_count, size=vector_size, alp
 doc_vectorizer.build_vocab(sentences)
 doc_vectorizer.train_words = False
 doc_vectorizer.train_lbls = True
-doc_vectorizer.train(sentences, epochs=30, total_examples=doc_vectorizer.corpus_count)
+doc_vectorizer.train(sentences, epochs=train_epoch, total_examples=doc_vectorizer.corpus_count)
 
 doc_vectorizer.save(modelfile)

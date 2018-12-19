@@ -5,14 +5,14 @@ from tqdm import tqdm
 from gensim.models import KeyedVectors
 
 alpha = sys.argv[1]
-eval_set_num = '02'
-use_tfidf = 1
+eval_set_num = '01'
+use_tfidf = 0
 with open('title_index.json') as f:
     t_i = json.loads(f.read())
 with open('index_title.json') as f:
     i_t = json.loads(f.read())
 
-fname='sample_edges_30k_'+eval_set_num+'.txt'
+fname='sample_edges_77k_'+eval_set_num+'.txt'
 g = nx.read_edgelist(fname, create_using=nx.Graph())
 if use_tfidf == 0:
     infile = 'embeddings/updated_embedding_alpha_'
@@ -27,6 +27,7 @@ for node in tqdm(common_idx):
     neis = [i_t[x] for x in list(g.neighbors(t_i[node]))]
     # print(neis)
     rec = np.array(embeddings.most_similar(node, topn=len(neis)))[:,0]
+
     # print(rec)
     hits = len(set(neis) & set(rec))
     accs.append(hits/len(neis))

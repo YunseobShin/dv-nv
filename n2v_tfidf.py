@@ -21,13 +21,14 @@ def train(input_file, output_file):
             if 'str' in line:
                 break
 
-    print('number of nodes: ', nx.number_of_nodes(g))
-    print('number of edges: ', nx.number_of_edges(g))
+    sub = g.subgraph(max(nx.connected_components(g), key=len))
+    print('number of nodes: ', nx.number_of_nodes(sub))
+    print('number of edges: ', nx.number_of_edges(sub))
 
     # Precompute probabilities and generate walks
-    node2vec = Node2Vec(g, dimensions=128, walk_length=100, num_walks=20, workers=8, p=0.25, q=1)
+    node2vec = Node2Vec(sub, dimensions=256, walk_length=100, num_walks=20, workers=8, p=0.25, q=1)
     # np.save(output_file + 'walks', node2vec.walks)
-    model = node2vec.fit(window=6, min_count=1, batch_words=4)  # Any keywords acceptable by gesim.Word2Vec can be passed, `diemnsions` and `workers` are automatically passed (from the Node2Vec constructor)
+    model = node2vec.fit(window=15, min_count=1, batch_words=4)  # Any keywords acceptable by gesim.Word2Vec can be passed, `diemnsions` and `workers` are automatically passed (from the Node2Vec constructor)
     model.wv.save_word2vec_format(output_file)
 
 if __name__ == '__main__':

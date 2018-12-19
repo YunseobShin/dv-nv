@@ -30,6 +30,7 @@ def file2dic(fname):
         wiki_dic[title] = page
         i_t[id] = title
         t_i[title] = id
+
     with open('wiki_dic.json', 'w') as w:
         json.dump(wiki_dic, w)
     with open('index_title.json', 'w') as w:
